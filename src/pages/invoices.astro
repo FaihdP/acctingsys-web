@@ -1,0 +1,76 @@
+---
+import DashboardLayout from "@layouts/DashboardLayout.astro";
+---
+
+<DashboardLayout>
+  <div 
+    class="
+      flex
+      flex-col
+      flex-grow
+      shadow-[0_0_3px_0px_rgba(0,0,0,0.5)]
+      rounded-lg
+      bg-[#F4F4F4]
+      overflow-auto
+    "
+  >
+    <div class="overflow-y-auto">
+      <table class="w-full">
+        <thead
+          class="
+            shadow-[0_1px_3px_-1px_rgba(0,0,0,0.5)] 
+            sticky
+            top-0
+            bg-white 
+            text-left
+          "
+        >
+          <tr
+            class="h-[35px]"
+          >
+            <td>Id</td>
+            <td>Fecha</td>
+            <td>Valor</td>
+            <td>Tipo</td>
+            <td>Estado</td>
+            <td>Persona</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="
+            bg-white 
+            text-[#5C5C5C]
+            border-gray-100
+            border-b
+            h-[30px]
+            shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1)]
+            hover:bg-[rgb(251,251,251,1)]
+          ">
+            <td>679c69d5ddcc64041d7404asd</td>
+            <td>2025-01-31T06:06:45.000Z</td>
+            <td>Pagada</td>
+            <td>Compra</td>
+            <td>190000</td>
+            <td>Faihd Pineda</td>
+          </tr>
+          <tr class="
+            bg-white 
+            text-[#5C5C5C]
+            border-gray-100
+            border-b
+            h-[30px]
+            shadow-[0_1px_3px_-1px_rgba(0,0,0,0.1)]
+            hover:bg-[rgb(251,251,251,1)]
+          ">
+            <td>679c69d5ddcc64041d74049c</td>
+            <td>2025-01-31T06:06:45.000Z</td>
+            <td>Pagada</td>
+            <td>Venta</td>
+            <td>13000</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</DashboardLayout>

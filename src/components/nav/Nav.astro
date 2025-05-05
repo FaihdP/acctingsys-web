@@ -1,0 +1,42 @@
+---
+import COLORS from "@styles/colors"
+import NavOption from "./NavOption.astro"
+---
+
+<nav
+  class="
+    h-[70px] 
+    text-white 
+    w-full 
+    flex 
+    items-center 
+    rounded-b-lg
+    px-[20px]
+  " 
+  style={{ background: COLORS.DARK_BLUE }}
+>
+  <NavOption 
+    text="Inicio" 
+    icon=""
+    selected={Astro.url.pathname.includes("/")}
+    href="/"
+  />
+  <NavOption 
+    text="Facturas" 
+    icon=""
+    selected={Astro.url.pathname.includes("/invoices")}
+    href="/invoices"
+  />
+  <NavOption 
+    text="Pagos" 
+    icon=""
+    selected={Astro.url.pathname.includes("/payments")}
+    href="/payments"
+  />
+  <NavOption 
+    text="Gastos" 
+    icon=""
+    selected={Astro.url.pathname.includes("/expenses")}
+    href="/expenses"
+  />
+</nav>

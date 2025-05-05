@@ -1,0 +1,32 @@
+---
+import COLORS from "@styles/colors"
+
+interface Props {
+  text: string;
+  icon: string;
+  selected: boolean;
+  href: string;
+}
+
+const { text, icon, selected, href } = Astro.props;
+---
+
+<a 
+  class={`
+    px-[30px] 
+    h-[70px] 
+    flex 
+    flex-col 
+    justify-center 
+    items-center 
+    cursor-pointer
+  `}
+  style={{
+    color: selected ? "black" : "white",
+    background: selected ? COLORS.GREEN : "transaparent"
+  }}
+  href={href}
+>
+  { icon }
+  <span class="text-[12px]">{ text }</span>
+</a>

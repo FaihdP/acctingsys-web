@@ -1,0 +1,85 @@
+---
+import BarChartView from './BarChartView';
+
+interface Props {
+  document: "invoices" | "expenses" | "payments"
+}
+
+const { document } = Astro.props
+
+const dataURLS = {
+  "invoices": "/api/invoices",
+  "expenses": "/api/expenses",
+  "payments": "/api/payments",
+}
+
+const titles = {
+  "invoices": "Facturas",
+  "expenses": "Gastos",
+  "payments": "Pagos",
+}
+
+let data = [
+  {
+    month: "Ene",
+    amount: 30200000,
+  },
+  {
+    month: "Feb",
+    amount: 31243000,
+  },
+  {
+    month: "Mar",
+    amount: 31243000,
+  },
+  {
+    month: "Abr",
+    amount: 34243000,
+  },
+  {
+    month: "May",
+    amount: 32243000,
+  },
+  {
+    month: "Jun",
+    amount: 36243000,
+  },
+  {
+    month: "Jul",
+    amount: 24243000,
+  },
+  {
+    month: "Ago",
+    amount: 25243000,
+  },
+  {
+    month: "Sep",
+    amount: 33243000,
+  },
+  {
+    month: "Oct",
+    amount: 21243000,
+  },
+  {
+    month: "Nov",
+    amount: 19243000,
+  },
+  {
+    month: "Dic",
+    amount: 26243000,
+  },
+]
+// try {
+//   const response = await fetch(dataURLS[document])
+//   if (!response.ok) throw new Error("Failed to fetch data")
+//   data = await response.json()
+// } catch (error) {
+//   console.error("Error fetching data:", error)
+//   return <div>Error loading chart</div>
+// }
+---
+
+<>
+  <h2 class="text-2xl mb-4">{titles[document]}</h2>
+  <BarChartView data={data} />
+</>
