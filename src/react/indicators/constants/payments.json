@@ -1,0 +1,44 @@
+[
+  {
+    "PaymentID": "67c8ef8da5ea7650b5750d28",
+    "date": "2025-03-05T12:42:40.000Z",
+    "status": "1",
+    "type": "CASH",
+    "value": 40000
+  },
+  {
+    "PaymentID": "68054a80a97a1290eba18832",
+    "date": "2025-04-20T07:26:33.000Z",
+    "status": "1",
+    "type": "CASH",
+    "value": 15000
+  },
+  {
+    "PaymentID": "67ad5a568fcabfa1cf90b180",
+    "date": "2025-02-12T14:34:49.000Z",
+    "status": "1",
+    "type": "CASH",
+    "value": 14000
+  },
+  {
+    "PaymentID": "67b23f21cb3de57c1a491dc1",
+    "date": "2025-02-16T07:40:01.000Z",
+    "status": "1",
+    "type": "CASH",
+    "value": 14000
+  },
+  {
+    "PaymentID": "679da7e33db6f4a92ef37577",
+    "date": "2025-01-31T16:49:14.000Z",
+    "status": "1",
+    "type": "DIGITAL",
+    "value": 7500
+  },
+  {
+    "PaymentID": "67cca23fede680b8adab8829",
+    "date": "2025-03-09T08:01:29.000Z",
+    "status": "1",
+    "type": "CASH",
+    "value": 4000
+  }
+]

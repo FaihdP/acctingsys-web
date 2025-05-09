@@ -27,6 +27,9 @@
       ],
       "@styles/*": [
         "./src/styles/*"
+      ],
+      "@react/*": [
+        "./src/react/*"
       ]
     },
     "jsx": "react-jsx",

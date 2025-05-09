@@ -1,0 +1,191 @@
+[
+  {
+      "InvoiceID": "679c3686572745ecb08ee8d2",
+      "date": "2025-01-30T14:33:31.000Z",
+      "value": 1500,
+      "type": "SALE",
+      "status": "En deuda"
+  },
+  {
+      "InvoiceID": "679c6ab5ddcc64041d74049e",
+      "date": "2025-01-31T06:13:17.000Z",
+      "value": 20000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "67a7bc97851e69ed7170ac01",
+      "date": "2025-02-08T08:20:23.000Z",
+      "value": 21000,
+      "type": "SALE",
+      "status": "En deuda",
+      "person": {
+          "name": "Faihd",
+          "lastname": "Pineda"
+      }
+  },
+  {
+      "InvoiceID": "67c8ef8da5ea7650b5750d27",
+      "date": "2025-03-05T12:42:40.000Z",
+      "value": 40000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "67c90fa88a3de8df4da682fc",
+      "date": "2025-03-05T14:59:41.000Z",
+      "value": 7500,
+      "type": "SALE",
+      "status": "En deuda"
+  },
+  {
+      "InvoiceID": "67cca23fede680b8adab8828",
+      "date": "2025-03-09T08:01:29.000Z",
+      "value": 4000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "6802a5a4dd4c87df7396ff78",
+      "date": "2025-04-18T07:18:36.000Z",
+      "value": 70000,
+      "type": "BUY",
+      "status": "En deuda",
+      "person": {
+          "name": "Faihd",
+          "lastname": "Pineda"
+      }
+  },
+  {
+      "InvoiceID": "680c1a391783f49bc22393bc",
+      "date": "2025-01-30T14:33:31.000Z",
+      "value": 1500,
+      "type": "SALE",
+      "status": "En deuda"
+  },
+  {
+      "InvoiceID": "680c1a391783f49bc22393c1",
+      "date": "2025-01-31T06:13:17.000Z",
+      "value": 20000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+    "InvoiceID": "679c3686572745ecb08ee8d2",
+    "date": "2025-01-30T14:33:31.000Z",
+    "value": 10000,
+    "type": "SALE",
+    "status": "En deuda"
+  },
+  {
+      "InvoiceID": "679c6ab5ddcc64041d74049e",
+      "date": "2025-01-31T06:13:17.000Z",
+      "value": 20000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "67a7bc97851e69ed7170ac01",
+      "date": "2025-02-08T08:20:23.000Z",
+      "value": 21000,
+      "type": "SALE",
+      "status": "En deuda",
+      "person": {
+          "name": "Faihd",
+          "lastname": "Pineda"
+      }
+  },
+  {
+      "InvoiceID": "67c8ef8da5ea7650b5750d27",
+      "date": "2025-03-05T12:42:40.000Z",
+      "value": 40000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "67c90fa88a3de8df4da682fc",
+      "date": "2025-03-05T14:59:41.000Z",
+      "value": 7500,
+      "type": "SALE",
+      "status": "En deuda"
+  },
+  {
+      "InvoiceID": "67cca23fede680b8adab8828",
+      "date": "2025-03-09T08:01:29.000Z",
+      "value": 4000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+      "InvoiceID": "6802a5a4dd4c87df7396ff78",
+      "date": "2025-04-18T07:18:36.000Z",
+      "value": 70000,
+      "type": "BUY",
+      "status": "En deuda",
+      "person": {
+          "name": "Faihd",
+          "lastname": "Pineda"
+      }
+  },
+  {
+      "InvoiceID": "680c1a391783f49bc22393bc",
+      "date": "2025-01-30T14:33:31.000Z",
+      "value": 15000,
+      "type": "SALE",
+      "status": "En deuda"
+  },
+  {
+      "InvoiceID": "680c1a391783f49bc22393c1",
+      "date": "2025-01-31T06:13:17.000Z",
+      "value": 20000,
+      "type": "SALE",
+      "status": "Pagada"
+  },
+  {
+    "InvoiceID": "679c6ab5ddcc64041d74049e",
+    "date": "2025-02-21T06:13:17.000Z",
+    "value": 20000,
+    "type": "SALE",
+    "status": "Pagada"
+  },
+{
+    "InvoiceID": "67a7bc97851e69ed7170ac01",
+    "date": "2025-04-23T08:20:23.000Z",
+    "value": 94000,
+    "type": "SALE",
+    "status": "En deuda",
+    "person": {
+        "name": "Faihd",
+        "lastname": "Pineda"
+    }
+},
+{
+  "InvoiceID": "679c6ab5ddcc64041d74049e",
+  "date": "2025-04-31T06:13:17.000Z",
+  "value": 20000,
+  "type": "SALE",
+  "status": "Pagada"
+},
+{
+  "InvoiceID": "67a7bc97851e69ed7170ac01",
+  "date": "2025-05-02T08:20:23.000Z",
+  "value": 52000,
+  "type": "SALE",
+  "status": "En deuda",
+  "person": {
+      "name": "Faihd",
+      "lastname": "Pineda"
+  }
+},
+{
+    "InvoiceID": "67a7bc97851e69ed7170ac01",
+    "date": "2025-05-07T08:20:23.000Z",
+    "value": 32000,
+    "type": "SALE",
+    "status": "En deuda",
+    "person": {
+        "name": "Faihd",
+        "lastname": "Pineda"
+    }
+}
+]
