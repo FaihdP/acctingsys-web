@@ -1,21 +1,12 @@
-import { useState, type ChangeEvent } from "react"
-import getInitalDateRange from "../util/getInitialDateRange"
 import DateRangeInput from "./DateRangeInput"
-import type IDateRange from "../interfaces/DateRange"
+import IndicatorsContext from "../hooks/IndicatorsContext"
+import { useContext } from "react"
 
 export default function DateRangeFilter() {
-  const [dateRange, setDateRange] = useState<IDateRange>(getInitalDateRange())
-
-  const handleChangeFilter = (field: string, data: string) => {
-    setDateRange((prev) => ({
-      ...prev,
-      [field]: data,
-    }))
-  }
-
+  const { handleChangeDateFilter, filter } = useContext(IndicatorsContext)
   return (
     <div className="flex flex-col w-full xl:flex-row mt-8">
-      <DateRangeInput dateRange={dateRange} handleChangeFilter={handleChangeFilter} />
+      <DateRangeInput dateRange={filter.dateRange} handleChangeFilter={handleChangeDateFilter} />
     </div>
   )
 }

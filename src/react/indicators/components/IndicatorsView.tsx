@@ -18,7 +18,7 @@ import IndicatorsContext from "../hooks/IndicatorsContext";
 
 export default function IndicatorsView() {
   const { 
-    data, 
+    field,
     document, 
     filterType, 
     setFilterType,
@@ -94,7 +94,7 @@ export default function IndicatorsView() {
                     <input 
                       type="radio" 
                       name="field" 
-                      defaultChecked={false} 
+                      defaultChecked={Boolean(Object.entries(value).find(([k]) => k === field))} 
                       onClick={(e) => handleChangeField(key)} 
                     />
                     <span className="text-sm">{value.label}</span>
@@ -104,8 +104,16 @@ export default function IndicatorsView() {
             }
           </div>
         </div>
-        <div className="flex w-full overflow-x-auto lg:ms-10">	
-          <Chart />
+        <div className={`flex ${filterType === FILTER_TYPES.COMPARISION ? "flex-col" : "flex-row"} w-full overflow-x-auto lg:ms-10`}>	
+          {
+            filterType === FILTER_TYPES.DATE_RANGE && <Chart />
+          }
+          {
+            filterType === FILTER_TYPES.COMPARISION && <>
+              <Chart />
+              <Chart />
+            </>
+          }
         </div>
       </div>
     </>

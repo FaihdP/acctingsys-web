@@ -14,7 +14,6 @@ export default function Chart() {
 
   useEffect(() => {
     const result = formatData(data, field, document)
-    console.log(result)
     setDataFormated(result)
   }, [data, field])
   
@@ -23,7 +22,7 @@ export default function Chart() {
       { 
         !field 
           ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={600}>
               <LineChart 
                 width={1200}
                 height={800}
