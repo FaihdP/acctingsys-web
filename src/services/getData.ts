@@ -5,7 +5,7 @@ export default async function getData(
   documentType: DOCUMENT_TYPES, 
   filter: { field?: string, value?: string, dateRange: IDateRange }
 ) {
-  const urlDocuments = {
+  const getterDocuments = {
     [DOCUMENT_TYPES.INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
     [DOCUMENT_TYPES.BUY_INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
     [DOCUMENT_TYPES.SALE_INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
@@ -13,8 +13,21 @@ export default async function getData(
     [DOCUMENT_TYPES.PAYMENTS]: async () => (await import("@react/indicators/constants/payments.json")).default
   }
 
-  const result = await urlDocuments[documentType]()
+  const originalData = await getterDocuments[documentType]()
+  // Add this object copy to avoid modify the orginal data reference (static JSON importer)
+  // TODO: Delete this when the data is fetched from the backend
+  const result = JSON.parse(JSON.stringify(originalData))
   return result.filter((item: any) => {
+    if (documentType === DOCUMENT_TYPES.SALE_INVOICES || documentType === DOCUMENT_TYPES.BUY_INVOICES) {
+      item.person = item.person ? `${item.person.name} ${item.person.lastname}` : "Desconocido"
+    }
+
+    if (documentType === DOCUMENT_TYPES.PAYMENTS) {
+      if (!item.bank) {
+        item.bank = item.type === "DIGITAL" ? "Desconocido" : "Efectivo"
+      }
+    }
+
     const { dateRange, field, value } = filter
     // TODO: Fix problem with dates in the same day with the filter
     const itemDate = new Date(item.date)

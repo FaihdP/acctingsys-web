@@ -4,6 +4,7 @@
     "date": "2025-03-05T12:42:40.000Z",
     "status": "1",
     "type": "CASH",
+    "bank": "Nequi",
     "value": 40000
   },
   {
@@ -17,6 +18,7 @@
     "PaymentID": "67ad5a568fcabfa1cf90b180",
     "date": "2025-02-12T14:34:49.000Z",
     "status": "1",
+    "bank": "Bancolombia",
     "type": "CASH",
     "value": 14000
   },

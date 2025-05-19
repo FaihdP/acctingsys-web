@@ -2,6 +2,7 @@ import { createContext, type Dispatch, type SetStateAction } from "react";
 import type { DOCUMENT_TYPES } from "../constants/DocumentTypes";
 import type { FILTER_TYPES } from "../constants/FilterTypes";
 import type IDateRange from "../interfaces/DateRange";
+import type { GridColDef } from "@mui/x-data-grid";
 
 interface IIndicatorsContext {
   data: any[],
@@ -15,6 +16,9 @@ interface IIndicatorsContext {
   filter: { dateRange: IDateRange, secondDateRange?: IDateRange, field?: string, value?: string },
   handleChangeFilter: (field: string, data: any) => void,
   handleChangeDateFilter: (field: string, data: string) => void,
+  columns: GridColDef[],
+  selectedData: any[],
+  setSelectedData: Dispatch<SetStateAction<any[]>>,
 }
 
 const IndicatorsContext = createContext({} as IIndicatorsContext)

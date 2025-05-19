@@ -6,16 +6,17 @@ import formatDateTicks from "../util/formatDateTicks";
 import getRandomColor from "../util/getRandomColor";
 import formatCurrency from "../util/formatCurrency";
 import getInterval from "../util/getInterval";
-import renderFilterDocumentLines from "../util/renderFilterDocumentLines";
+import renderFilterDocumentLines from "../renders/renderFilterDocumentLines";
+import type { Documents } from "@/interfaces/Documents";
 
 export default function Chart() {
-  const { data, field, document } = useContext(IndicatorsContext)
+  const { data, field, setSelectedData } = useContext(IndicatorsContext)
   const [dataFormated, setDataFormated] = useState<any[]>([])
 
   useEffect(() => {
-    const result = formatData(data, field, document)
-    setDataFormated(result)
-  }, [data, field])
+    const result = formatData(data, field as keyof Documents)
+    setDataFormated(result)    
+  }, [data, field, document])
   
   return (
     <>
@@ -48,6 +49,7 @@ export default function Chart() {
                   dataKey="value" 
                   type="bump"
                   stroke={getRandomColor()}
+                  activeDot={{ onClick: (_, index) => setSelectedData((index as any).payload.data) }}
                 />
                 <Legend formatter={() => "Valor"}/>
                 <Brush height={10} />
@@ -77,7 +79,7 @@ export default function Chart() {
                 <Tooltip  
                   formatter={(value: number, name) => [`${formatCurrency(value)}`, "Valor"]}
                 />
-                { renderFilterDocumentLines(document) }
+                {renderFilterDocumentLines(Object.keys(dataFormated[0]).filter((key) => !["date", "data"].includes(key)))}
                 <Brush height={10} />
                 <Legend />
               </LineChart>

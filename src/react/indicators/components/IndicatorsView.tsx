@@ -6,28 +6,30 @@ import { FILTER_TYPES, FILTER_TYPES_TEXTS } from "../constants/FilterTypes";
 import { DOCUMENT_TYPES, DOCUMENT_TYPES_TEXTS } from "../constants/DocumentTypes";
 import { DOCUMENT_FIELDS } from "../constants/DocumentFields";
 import IndicatorsContext from "../hooks/IndicatorsContext";
-
-// try {
-//   const response = await fetch(dataURLS[document])
-//   if (!response.ok) throw new Error("Failed to fetch data")
-//   data = await response.json()
-// } catch (error) {
-//   console.error("Error fetching data:", error)
-//   return <div>Error loading chart</div>
-// }
+import { Paper } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 
 export default function IndicatorsView() {
   const { 
+    data,
     field,
     document, 
     filterType, 
     setFilterType,
     handleChangeField,
-    handleChangeDocument
+    handleChangeDocument,
+    columns,
+    setSelectedData,
+    selectedData
   } = useContext(IndicatorsContext)
 
+  const dataWithIds = (selectedData.length > 0 ? selectedData : data).map((document, index) => ({
+    ...document,
+    id: index
+  }))
+
   return (
-    <>
+    <div className="flex flex-col">
       <div className="flex flex-col lg:flex-row flex-grow w-full overflow-hidden">
         <div className="flex flex-col w-full lg:w-[35%]">
           <div>
@@ -104,18 +106,42 @@ export default function IndicatorsView() {
             }
           </div>
         </div>
-        <div className={`flex ${filterType === FILTER_TYPES.COMPARISION ? "flex-col" : "flex-row"} w-full overflow-x-auto lg:ms-10`}>	
+        <div className={`
+          flex ${filterType === FILTER_TYPES.COMPARISION ? "flex-col" : "flex-col"} 
+          w-full 
+          lg:ms-10
+          overflow-x-auto
+        `}>
+          <div className=" h-[calc(100vh-200px)]">
+            {
+              filterType === FILTER_TYPES.DATE_RANGE && <Chart />
+            }
+            {
+              filterType === FILTER_TYPES.COMPARISION && <>
+                <Chart />
+                <Chart />
+              </>
+            }
+          </div>
           {
-            filterType === FILTER_TYPES.DATE_RANGE && <Chart />
-          }
-          {
-            filterType === FILTER_TYPES.COMPARISION && <>
-              <Chart />
-              <Chart />
-            </>
+            filterType !== FILTER_TYPES.COMPARISION && (
+              <Paper sx={{ height: 500, width: '100%' }}>
+                <DataGrid
+                  rows={dataWithIds}
+                  columns={columns}
+                  initialState={{ pagination: { paginationModel: { page: 0, pageSize: 10 } }}}
+                  pageSizeOptions={[10, 15]}
+                  sx={{ border: 0 }}
+                  localeText={{
+                    paginationRowsPerPage: "Filas por página",
+                  }}
+                />
+              </Paper>
+            )
           }
         </div>
       </div>
-    </>
+      
+    </div>
   )
 }

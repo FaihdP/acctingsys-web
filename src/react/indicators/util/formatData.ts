@@ -1,65 +1,65 @@
-import type { DocumentsArray } from "@/interfaces/DocumentsArray";
+import type { Documents } from "@/interfaces/Documents";
 import formatDate from "./formatDate";
-import { DOCUMENT_TYPES } from "../constants/DocumentTypes";
-import { DOCUMENT_FIELDS } from "../constants/DocumentFields";
 
-export default function formatData(data: DocumentsArray, field: string, documentType?: DOCUMENT_TYPES) {
-  if (!field) return processData(data)
-  
-  const groupedData = groupData(data, field)
+export default function formatData(documents: Documents[], field: keyof Documents) {
+  if (!documents || documents.length === 0) return []
+  if (!field) return processData(documents)
+
+  const groupedData = groupData(documents, field)
   if (!groupedData) return []
+  const knownFieldValues = new Set<string>()
+  documents.forEach((document) => {
+    const fieldValue = document[field] as string
+    const isKnowFieldValue = knownFieldValues.has(fieldValue)
+    if (!isKnowFieldValue) knownFieldValues.add(fieldValue)
+  })
+  
   const accumulatedData = {}
-  Object.entries(groupedData).forEach((group: any[], index) => {
-    accumulateData(group[1] ?? [], accumulatedData, field, group[0], documentType)
+  Object.entries(groupedData).forEach((group: any[]) => {
+    knownFieldValues.add(group[0])
+    accumulateData(group[1] ?? [], accumulatedData, group[0], knownFieldValues)
   })
 
-  return Object.values(accumulatedData)
+  const result = Object.values(accumulatedData)
+  return result
 }
 
-function processData(data: DocumentsArray) {
-  sortData(data)
-  const accumlatedData = accumulateData(data)
+function processData(documents: Documents[]) {
+  sortData(documents)
+  const accumlatedData = accumulateData(documents)
   return Object.values(accumlatedData)
 }
 
-function sortData(data: any[]) {
+function sortData(documents: any[]) {
   // Modifies the original array
-  data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+  documents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 }
 
 function accumulateData(
-  data: any[], 
-  accumulator: any = {}, 
-  field?: string,
-  fieldValue?: string, 
-  documentType?: DOCUMENT_TYPES, 
+  documents: Documents[], 
+  accumulator?: any, 
+  accumulateFieldValue?: string, 
+  knownFieldValues?: Set<string>, 
 ) {
-  data.reduce(
-    (_, item) => {
-      const date = formatDate(item.date)
-      accumulator[date] = accumulator[date] ?? { date, [fieldValue || "value"]: 0 }
-      if (fieldValue && documentType && field) {
-        console.log(field)
-        const values = DOCUMENT_FIELDS.get(documentType)[field].values
-        console.log(values)
-        values.forEach((otherField: string) => {
-          accumulator[date][otherField] = accumulator[date][otherField] ?? 0    
-          accumulator[date][fieldValue] += item.value
-        })
-      } else {
-        accumulator[date]["value"] = accumulator[date]["value"] ?? 0
-        accumulator[date]["value"] += item.value
-      }
-      return accumulator
-    }, 
-    {}
-  )
+  return documents.reduce(
+    (acc, item) => {
+      const date = formatDate(item.date.toString())
+      const fieldName = accumulateFieldValue || "value"
+      acc[date] ||= { date, [fieldName]: 0, data: [] }
+      acc[date].data.push(item)
+      const fieldValues = knownFieldValues ? Array.from(knownFieldValues) : ["value"]
+      fieldValues.forEach((fieldValue) => {
+        acc[date][fieldValue] = (acc[date][fieldValue] || 0) + (fieldValue === fieldName ? item.value : 0)
+      })
 
-  return accumulator
+      return acc
+    }, 
+    accumulator || {}
+  )
 }
 
-function groupData(data: DocumentsArray, field: string) {
-  return Object.groupBy(data, (doc) => {
+function groupData(documents: Documents[], field: string) {
+  return Object.groupBy(documents, (doc) => {
     if (field in doc) return (doc as any)[field] as PropertyKey;
     return "undefined" as PropertyKey;
   });
