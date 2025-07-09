@@ -3,44 +3,47 @@ import type IDateRange from "@/react/indicators/interfaces/DateRange";
 
 export default async function getData(
   documentType: DOCUMENT_TYPES, 
-  filter: { field?: string, value?: string, dateRange: IDateRange }
+  filter: { 
+    dateRange: IDateRange 
+    fields?: { field: string, value: string }[]
+  }
 ) {
-  const getterDocuments = {
-    [DOCUMENT_TYPES.INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
-    [DOCUMENT_TYPES.BUY_INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
-    [DOCUMENT_TYPES.SALE_INVOICES]: async () => (await import("@react/indicators/constants/invoices.json")).default,
-    [DOCUMENT_TYPES.EXPENSES]: async () => (await import("@react/indicators/constants/expenses.json")).default,
-    [DOCUMENT_TYPES.PAYMENTS]: async () => (await import("@react/indicators/constants/payments.json")).default
+  let pathQueryString = new URLSearchParams()
+  
+  if ([DOCUMENT_TYPES.SALE_INVOICES, DOCUMENT_TYPES.BUY_INVOICES].includes(documentType)) {
+    pathQueryString.set("type", "invoices")
+    documentType = DOCUMENT_TYPES.INVOICES
   }
 
-  const originalData = await getterDocuments[documentType]()
-  // Add this object copy to avoid modify the orginal data reference (static JSON importer)
-  // TODO: Delete this when the data is fetched from the backend
-  const result = JSON.parse(JSON.stringify(originalData))
-  return result.filter((item: any) => {
-    if (documentType === DOCUMENT_TYPES.SALE_INVOICES || documentType === DOCUMENT_TYPES.BUY_INVOICES) {
-      item.person = item.person ? `${item.person.name} ${item.person.lastname}` : "Desconocido"
-    }
+  if (filter.fields) {
+    filter.fields.forEach((field) => {
+      pathQueryString.append(field.field, field.value)
+    }) 
+  }
 
-    if (documentType === DOCUMENT_TYPES.PAYMENTS) {
-      if (!item.bank) {
-        item.bank = item.type === "DIGITAL" ? "Desconocido" : "Efectivo"
-      }
-    }
+  if (!pathQueryString.get("branch")) {
+    pathQueryString.set("branch", "all")
+  }
 
-    const { dateRange, field, value } = filter
-    // TODO: Fix problem with dates in the same day with the filter
-    const itemDate = new Date(item.date)
-    const itemDateOnly = new Date(itemDate.getFullYear(), itemDate.getMonth(), itemDate.getDate())
-    
-    const startDate = new Date(dateRange.start)
-    const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate())
-    
-    const endDate = new Date(dateRange.end)
-    const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate())
+  if (filter.dateRange) {
+    pathQueryString.append("start", filter.dateRange.start)
+    pathQueryString.append("end", filter.dateRange.end)
+  }
 
-    let filterField = true
-    if (field && value) filterField = item[field] === value
-    return itemDateOnly >= startDateOnly && itemDateOnly <= endDateOnly && filterField
+  const res = await fetch('/api/getDocuments?' + pathQueryString, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
   })
+
+  if (!res.ok) return undefined
+
+  if (documentType === DOCUMENT_TYPES.INVOICES) {
+    const data = await res.json()
+    return data.map((item: any) => ({
+      ...item,
+      person: item.person || "Desconocido",
+    }))
+  }
+
+  return await res.json()
 }

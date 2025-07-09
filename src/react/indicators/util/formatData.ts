@@ -1,15 +1,15 @@
 import type { Documents } from "@/interfaces/Documents";
 import formatDate from "./formatDate";
 
-export default function formatData(documents: Documents[], field: keyof Documents) {
+export default function formatData(documents: Documents[], groupBy: keyof Documents) {
   if (!documents || documents.length === 0) return []
-  if (!field) return processData(documents)
+  if (!groupBy) return processData(documents)
 
-  const groupedData = groupData(documents, field)
+  const groupedData = groupData(documents, groupBy)
   if (!groupedData) return []
   const knownFieldValues = new Set<string>()
   documents.forEach((document) => {
-    const fieldValue = document[field] as string
+    const fieldValue = document[groupBy] as string
     const isKnowFieldValue = knownFieldValues.has(fieldValue)
     if (!isKnowFieldValue) knownFieldValues.add(fieldValue)
   })
@@ -20,8 +20,8 @@ export default function formatData(documents: Documents[], field: keyof Document
     accumulateData(group[1] ?? [], accumulatedData, group[0], knownFieldValues)
   })
 
-  const result = Object.values(accumulatedData)
-  return result
+  const result = sortGroupedData(accumulatedData)
+  return Object.values(result)
 }
 
 function processData(documents: Documents[]) {
@@ -30,8 +30,7 @@ function processData(documents: Documents[]) {
   return Object.values(accumlatedData)
 }
 
-function sortData(documents: any[]) {
-  // Modifies the original array
+function sortData(documents: Documents[]) {
   documents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 }
 
@@ -58,9 +57,23 @@ function accumulateData(
   )
 }
 
-function groupData(documents: Documents[], field: string) {
+function groupData(documents: Documents[], groupBy: string) {
   return Object.groupBy(documents, (doc) => {
-    if (field in doc) return (doc as any)[field] as PropertyKey;
+    if (groupBy in doc) return (doc as any)[groupBy] as PropertyKey;
     return "undefined" as PropertyKey;
   });
+}
+
+function sortGroupedData(groupedData: any) {
+  const sortedEntries = Object.entries(groupedData).sort(([dateA], [dateB]) => {
+    const [dayA, monthA, yearA] = dateA.split('/')
+    const [dayB, monthB, yearB] = dateB.split('/')
+  
+    const a = new Date(`${yearA}-${monthA}-${dayA}`)
+    const b = new Date(`${yearB}-${monthB}-${dayB}`)
+  
+    return a.getTime() - b.getTime()
+  })
+
+  return Object.fromEntries(sortedEntries)
 }

@@ -8,22 +8,25 @@ import { DOCUMENT_FIELDS } from "../constants/DocumentFields";
 import IndicatorsContext from "../hooks/IndicatorsContext";
 import { Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import Spin from "./Spin";
+import COLORS from "@/styles/colors";
+import formatCurrency from "../util/formatCurrency";
 
 export default function IndicatorsView() {
   const { 
+    filter,
     data,
-    field,
     document, 
     filterType, 
     setFilterType,
-    handleChangeField,
+    setGroupBy,
     handleChangeDocument,
     columns,
-    setSelectedData,
+    isLoading,
     selectedData
   } = useContext(IndicatorsContext)
 
-  const dataWithIds = (selectedData.length > 0 ? selectedData : data).map((document, index) => ({
+  const dataWithIds = (selectedData.length > 0 ? selectedData : data || []).map((document, index) => ({
     ...document,
     id: index
   }))
@@ -89,15 +92,25 @@ export default function IndicatorsView() {
           <div className="mt-10">
             <span className="text-sm">Campos</span>
             <hr className="text-gray-200 mt-1"/>
+            <label className="mt-3 flex items-center gap-3">
+              <input 
+                type="radio" 
+                name="field" 
+                defaultChecked={true} 
+                onChange ={(e) => setGroupBy(undefined)} 
+              />
+              <span className="text-sm">Sin agrupación</span>
+            </label>
             {
               Object.entries(DOCUMENT_FIELDS.get(document)).map(([key, value]: [string, any]) => {
+                const valueField = filter.fields?.find((f) => f.field === key)?.value
                 return (
                   <label key={key} className="mt-3 flex items-center gap-3">
                     <input 
                       type="radio" 
                       name="field" 
-                      defaultChecked={Boolean(Object.entries(value).find(([k]) => k === field))} 
-                      onClick={(e) => handleChangeField(key)} 
+                      defaultChecked={Boolean(Object.entries(value).find(([k]) => k === valueField))} 
+                      onChange ={(e) => setGroupBy(key as any)} 
                     />
                     <span className="text-sm">{value.label}</span>
                   </label>
@@ -112,12 +125,24 @@ export default function IndicatorsView() {
           lg:ms-10
           overflow-x-auto
         `}>
-          <div className=" h-[calc(100vh-200px)]">
-            {
-              filterType === FILTER_TYPES.DATE_RANGE && <Chart />
+          <div className="h-[calc(100vh-200px)] mb-[60px]">
+            <div className="flex flex-col mb-5 items-center">
+              <span>Valor { DOCUMENT_TYPES_TEXTS.get(document) }</span>
+              <span className='text-[18px] font-semibold'>
+                { isLoading 
+                  ? <Spin size={14} /> 
+                  : <>{formatCurrency(data.reduce((acc, doc) => acc + doc.value, 0))}</>
+                }
+              </span> 
+            </div>
+            { isLoading && 
+                <div className="h-full flex items-center justify-center text-xl">
+                  <Spin /> <span className="ms-5">Cargando...</span>
+                </div> 
             }
+            { !isLoading && filterType === FILTER_TYPES.DATE_RANGE && <Chart /> }
             {
-              filterType === FILTER_TYPES.COMPARISION && <>
+              !isLoading && filterType === FILTER_TYPES.COMPARISION && <>
                 <Chart />
                 <Chart />
               </>
@@ -125,7 +150,7 @@ export default function IndicatorsView() {
           </div>
           {
             filterType !== FILTER_TYPES.COMPARISION && (
-              <Paper sx={{ height: 500, width: '100%' }}>
+              <Paper sx={{ width: '100%' }}>
                 <DataGrid
                   rows={dataWithIds}
                   columns={columns}

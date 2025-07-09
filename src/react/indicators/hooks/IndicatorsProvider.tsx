@@ -1,49 +1,63 @@
 import { useEffect, useState } from "react";
 import { DOCUMENT_TYPES } from "../constants/DocumentTypes";
 import { FILTER_TYPES } from "../constants/FilterTypes";
-import IndicatorsContext from "./IndicatorsContext";
+import IndicatorsContext, { type IFilter } from "./IndicatorsContext";
 import getData from "@/services/getData";
 import type { Documents } from "@/interfaces/Documents";
-import type IDateRange from "../interfaces/DateRange";
 import getInitalDateRange from "../util/getInitialDateRange";
 import type { GridColDef } from "@mui/x-data-grid";
-import formatDate from "../util/formatDate";
+import { INVOICES_COLUMNS, EXPENSES_COLUMNS, PAYMENTS_COLUMNS } from "../constants/TablesColumns";
 
 export default function IndicatorsProvider({ children }: { children: React.ReactNode }) {
+  // TODO: move document and filterType in filter state
   const [document, setDocument] = useState<DOCUMENT_TYPES>(DOCUMENT_TYPES.SALE_INVOICES)
   const [filterType, setFilterType] = useState<FILTER_TYPES>(FILTER_TYPES.DATE_RANGE)  
-  const [filter, setFilter] = useState<{ dateRange: IDateRange, secondDateRange?: IDateRange, field?: string, value?: string }>({
+  const [groupBy, setGroupBy] = useState<keyof Documents | undefined>()
+  const [filter, setFilter] = useState<IFilter>({
     dateRange: getInitalDateRange(),
-    secondDateRange: getInitalDateRange(),
-    field: "type",
-    value: "SALE"
+    fields: []
   })
   const [data, setData] = useState<Documents[]>([])
-  const [secondData, setSecondData] = useState<Documents[]>([])
-  const [field, setField] = useState<string>("")
   const [selectedData, setSelectedData] = useState<Documents[]>([])
+  const [columns, setColumns] = useState<GridColDef[]>(INVOICES_COLUMNS)
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleChangeDocument (document: DOCUMENT_TYPES) {
-    setField("")
+    setGroupBy(undefined)
     setFilter((prev) => ({
       ...prev,
-      field: "",
-      value: ""
+      fields: []
     }))
 
     if ([DOCUMENT_TYPES.SALE_INVOICES, DOCUMENT_TYPES.BUY_INVOICES].includes(document)) {
+      setColumns(INVOICES_COLUMNS)
       setFilter((prev) => ({
         ...prev,
-        field: "type",
-        value: document === DOCUMENT_TYPES.SALE_INVOICES ? "SALE" : "BUY"
+        fields: [
+          { field: "type", value: document === DOCUMENT_TYPES.SALE_INVOICES ? "SALE" : "BUY" }
+        ]
+      }))
+    } else {
+      setColumns(document === DOCUMENT_TYPES.EXPENSES ? EXPENSES_COLUMNS : PAYMENTS_COLUMNS)
+      setFilter((prev) => ({
+        ...prev,
+        fields: [{ field: "type", value: document }]
       }))
     }
     
     setDocument(document)
   }
 
-  function handleChangeField (field: string) {
-    setField(field)
+  function handleChangeField (field: string, value: string) {
+    setFilter((prev) => {
+      return {
+        ...prev,
+        fields: [
+          ...(prev.fields ?? []),
+          { field, value }
+        ]
+      }
+    })
   }
 
   function handleChangeFilter (field: string, data: any) {
@@ -63,69 +77,12 @@ export default function IndicatorsProvider({ children }: { children: React.React
     }))
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'InvoiceID',
-      headerName: 'Invoice ID',
-      width: 250 
-    },
-    {
-      field: 'date',
-      headerName: 'Fecha',
-      valueFormatter: (params: any) => formatDate(params),
-      width: 200
-    },
-    {
-      field: 'value',
-      headerName: 'Valor',
-      type: 'number',
-    },
-    {
-      field: 'type',
-      headerName: 'Tipo',
-      valueGetter: (params: any) => params === "BUY" ? "Compra" : "Venta",
-    },
-    {
-      field: 'status',
-      headerName: 'Estado',
-      // valueGetter: (params: any) => {
-      //   const isPaid = params === "Pagada"
-      //   const invoiceColors = {
-      //     background: isPaid ? "#0D6948" : "#922323",
-      //     fontColor: isPaid ? "#FB8383" : "#07F9A2"
-      //   }
-      //   return (
-      //     <span
-      //       className="inline-block mx-1 rounded-lg px-[6px]"
-      //       style={{
-      //         background: invoiceColors?.background,
-      //         color: invoiceColors?.fontColor
-      //       }}
-      //     >
-      //       { params }
-      //     </span>
-      //   )
-      // },
-    },
-    {
-      field: 'person',
-      headerName: 'Persona',
-      valueGetter: (params: any) => params,
-      width: 200
-    },
-  ]
-
   useEffect(() => {
     async function fetchData() {
-      if (filterType === FILTER_TYPES.COMPARISION && filter.secondDateRange) {
-        const data = (await getData(document, { ...filter, dateRange: filter.dateRange })) as Documents[]
-        setData(data)   
-        const secondData = (await getData(document, { ...filter, dateRange: filter.secondDateRange })) as Documents[]
-        setSecondData(secondData)
-      } else {
-        const data = (await getData(document, filter)) as Documents[]
-        setData(data) 
-      }
+      setIsLoading(true)
+      const data = (await getData(document, filter)) as Documents[]
+      setData(data) 
+      setIsLoading(false)
     }
 
     fetchData()
@@ -138,15 +95,17 @@ export default function IndicatorsProvider({ children }: { children: React.React
       document,
       filterType,
       setFilterType,
-      field,
-      handleChangeField,
       handleChangeDocument,
+      handleChangeField,
       filter,
       handleChangeFilter,
       handleChangeDateFilter,
       columns,
       selectedData,
-      setSelectedData
+      setSelectedData,
+      groupBy,
+      setGroupBy,
+      isLoading
     }}>
       {children}
     </IndicatorsContext.Provider>
