@@ -1,6 +1,15 @@
 ---
 import COLORS from "@styles/colors"
 import NavOption from "./NavOption.astro"
+import Logo from "../Logo.astro"
+import HomeIcon from "./icons/HomeIcon.astro"
+import SalesIcon from "./icons/SalesIcon.astro"
+import PaymentsIcon from "./icons/PaymentsIcon.astro"
+import ExpensesIcon from "./icons/ExpensesIcon.astro"
+
+const validatePath = (path: string) => {
+  return Astro.url.pathname.includes(path)
+}
 ---
 
 <nav
@@ -15,28 +24,34 @@ import NavOption from "./NavOption.astro"
   " 
   style={{ background: COLORS.DARK_BLUE }}
 >
+  <Logo />
   <NavOption 
     text="Inicio" 
-    icon=""
-    selected={Astro.url.pathname.includes("/")}
+    selected={Astro.url.pathname === "/"}
     href="/"
-  />
+  >
+    <HomeIcon />
+  </NavOption>
   <NavOption 
     text="Facturas" 
-    icon=""
-    selected={Astro.url.pathname.includes("/invoices")}
+    selected={validatePath("/invoices")}
     href="/invoices"
-  />
+    marginTopText="5"
+  >
+    <SalesIcon />
+  </NavOption>
   <NavOption 
     text="Pagos" 
-    icon=""
-    selected={Astro.url.pathname.includes("/payments")}
+    selected={validatePath("/payments")}
     href="/payments"
-  />
+  >
+    <PaymentsIcon />
+  </NavOption>
   <NavOption 
     text="Gastos" 
-    icon=""
-    selected={Astro.url.pathname.includes("/expenses")}
+    selected={validatePath("/expenses")}
     href="/expenses"
-  />
+  >
+    <ExpensesIcon size="23px" />
+  </NavOption>
 </nav>

@@ -1,7 +1,8 @@
 export default interface Expense {
-  ExpenseID: string,
-  date: Date
+  date: string
   value: number
+  entryKey: string
+  branchId: string
   title: string
   description?: string
 }

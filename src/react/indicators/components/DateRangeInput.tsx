@@ -22,6 +22,7 @@ export default function DateRangeInput({
           className="
             flex-1
             bg-[#F4F4F4] 
+            dark:bg-[#1E1E1E]
             ps-3
             shadow-[0_0_3px_0px_rgba(0,0,0,0.5)] 
             border 
@@ -41,6 +42,7 @@ export default function DateRangeInput({
           className="
             flex-1
             bg-[#F4F4F4] 
+            dark:bg-[#1E1E1E]
             ps-3
             shadow-[0_0_3px_0px_rgba(0,0,0,0.5)] 
             border 

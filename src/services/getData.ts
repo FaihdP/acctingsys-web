@@ -1,3 +1,4 @@
+import { DOCUMENT_FIELDS } from "@/react/indicators/constants/DocumentFields";
 import { DOCUMENT_TYPES } from "@/react/indicators/constants/DocumentTypes";
 import type IDateRange from "@/react/indicators/interfaces/DateRange";
 
@@ -39,9 +40,23 @@ export default async function getData(
 
   if (documentType === DOCUMENT_TYPES.INVOICES) {
     const data = await res.json()
+    const documentFields = DOCUMENT_FIELDS.get(documentType)
+    if (documentFields) {
+      const newData = await Promise.all(data.map(async (item: any) => ({
+        ...item,
+        person: documentFields.person.getterText(item.person),
+        branchId: await documentFields.branchId.getterText(item.branchId.replace("BRANCH#", "")),
+      })))
+      return newData
+    }
+    return data
+  }
+
+  if (documentType === DOCUMENT_TYPES.PAYMENTS) {
+    const data = await res.json()
     return data.map((item: any) => ({
       ...item,
-      person: item.person || "Desconocido",
+      bank: item.bank || "Ninguno",
     }))
   }
 

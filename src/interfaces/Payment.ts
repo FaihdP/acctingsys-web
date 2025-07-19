@@ -1,7 +1,8 @@
 export default interface Payment {
-  PaymentID: String
-  date: Date
+  date: string
   value: number
   type: "DIGITAL" | "CASH"
+  entryKey: string
+  branchId: string
   bank?: string
 }

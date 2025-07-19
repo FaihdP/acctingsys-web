@@ -1,3 +1,4 @@
+import getBranch from "@/services/getBranch";
 import { DOCUMENT_TYPES } from "./DocumentTypes";
 
 const INVOICE_FIELDS = { 
@@ -7,15 +8,30 @@ const INVOICE_FIELDS = {
   }, 
   person: { 
     label: "Persona",
-  } 
+    getterText: (person: string) => person || "Desconocido"
+  },
+  branchId: {
+    label: "Sucursal",
+    getterText: async (branchId: string) => await getBranch(branchId)
+  }
 }
-const EXPENSE_FIELDS = { title: { label: "Tipo de gasto"} }
+const EXPENSE_FIELDS = { 
+  title: { label: "Tipo de gasto"}, 
+  branchId: {
+    label: "Sucursal",
+    getterText: async (branchId: string) => await getBranch(branchId)
+  }
+}
 const PAYMENT_FIELDS = { 
   type: { 
     label: "Tipo de pago",
     values: ["DIGITAL", "CASH"]
   }, 
-  bank: { label: "Banco" } 
+  bank: { label: "Banco" },
+  branchId: {
+    label: "Sucursal",
+    getterText: async (branchId: string) => await getBranch(branchId)
+  }
 }
 
 export const DOCUMENT_FIELDS = new Map<DOCUMENT_TYPES, any>([

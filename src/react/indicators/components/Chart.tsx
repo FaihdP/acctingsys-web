@@ -76,7 +76,7 @@ export default function Chart() {
         <Tooltip  
           formatter={(value: number, name) => [`${formatCurrency(value)}`, "Valor"]}
         />
-        {renderFilterDocumentLines(Object.keys(dataFormated[0]).filter((key) => !["date", "data"].includes(key)))}
+        {renderFilterDocumentLines(Object.keys(dataFormated[0] || {}).filter((key) => !["date", "data"].includes(key)))}
         <Brush height={10} />
         <Legend />
       </LineChart>

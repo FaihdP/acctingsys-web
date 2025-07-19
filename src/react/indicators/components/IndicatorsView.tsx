@@ -46,6 +46,7 @@ export default function IndicatorsView() {
                 className="
                   flex-1
                   bg-[#F4F4F4] 
+                  dark:bg-[#1E1E1E]
                   ps-3
                   shadow-[0_0_3px_0px_rgba(0,0,0,0.5)] theme
                   border 
@@ -70,6 +71,7 @@ export default function IndicatorsView() {
                 className="
                   flex-1
                   bg-[#F4F4F4] 
+                  dark:bg-[#1E1E1E]
                   ps-3
                   shadow-[0_0_3px_0px_rgba(0,0,0,0.5)] 
                   border 
@@ -90,7 +92,7 @@ export default function IndicatorsView() {
             { filterType === FILTER_TYPES.DATE_RANGE && <DateRangeFilter />}
           </div>
           <div className="mt-10">
-            <span className="text-sm">Campos</span>
+            <span className="text-sm">Agrupar por</span>
             <hr className="text-gray-200 mt-1"/>
             <label className="mt-3 flex items-center gap-3">
               <input 
@@ -131,7 +133,7 @@ export default function IndicatorsView() {
               <span className='text-[18px] font-semibold'>
                 { isLoading 
                   ? <Spin size={14} /> 
-                  : <>{formatCurrency(data.reduce((acc, doc) => acc + doc.value, 0))}</>
+                  : <>$ {formatCurrency(data.reduce((acc, doc) => acc + doc.value, 0))}</>
                 }
               </span> 
             </div>
