@@ -1,0 +1,15 @@
+---
+import DashboardLayout from "@layouts/DashboardLayout.astro";
+import { DOCUMENT_TYPES } from "@/react/indicators/constants/DocumentTypes";
+import getInitialDateRange from "@/react/indicators/util/getInitialDateRange";
+import Table from "@/react/indicators/table/Table";
+
+---
+
+<DashboardLayout>
+  <Table 
+    client:only
+    documentType={DOCUMENT_TYPES.PAYMENTS}
+    filter={{ dateRange: getInitialDateRange() }}
+  />
+</DashboardLayout>

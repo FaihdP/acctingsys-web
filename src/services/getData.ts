@@ -14,6 +14,8 @@ export default async function getData(
   if ([DOCUMENT_TYPES.SALE_INVOICES, DOCUMENT_TYPES.BUY_INVOICES].includes(documentType)) {
     pathQueryString.set("type", "invoices")
     documentType = DOCUMENT_TYPES.INVOICES
+  } else {
+    pathQueryString.set("type", documentType)
   }
 
   if (filter.fields) {
@@ -54,10 +56,17 @@ export default async function getData(
 
   if (documentType === DOCUMENT_TYPES.PAYMENTS) {
     const data = await res.json()
-    return data.map((item: any) => ({
-      ...item,
-      bank: item.bank || "Ninguno",
-    }))
+    const documentFields = DOCUMENT_FIELDS.get(documentType)
+    if (documentFields) {
+      const newData = await Promise.all(data.map(async (item: any) => ({
+        ...item,
+        bank: item.bank || "Ninguno",
+        branchId: await documentFields.branchId.getterText(item.branchId.replace("BRANCH#", "")),
+        type: documentFields.type.getterText(item.type),
+      })))
+      return newData
+    }
+    return data
   }
 
   return await res.json()

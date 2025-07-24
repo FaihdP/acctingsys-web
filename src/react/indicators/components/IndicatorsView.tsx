@@ -19,6 +19,7 @@ export default function IndicatorsView() {
     document, 
     filterType, 
     setFilterType,
+    groupBy,
     setGroupBy,
     handleChangeDocument,
     columns,
@@ -97,8 +98,8 @@ export default function IndicatorsView() {
             <label className="mt-3 flex items-center gap-3">
               <input 
                 type="radio" 
-                name="field" 
-                defaultChecked={true} 
+                name="groupBy" 
+                defaultChecked={groupBy === undefined} 
                 onChange ={(e) => setGroupBy(undefined)} 
               />
               <span className="text-sm">Sin agrupación</span>
@@ -110,7 +111,7 @@ export default function IndicatorsView() {
                   <label key={key} className="mt-3 flex items-center gap-3">
                     <input 
                       type="radio" 
-                      name="field" 
+                      name="groupBy" 
                       defaultChecked={Boolean(Object.entries(value).find(([k]) => k === valueField))} 
                       onChange ={(e) => setGroupBy(key as any)} 
                     />

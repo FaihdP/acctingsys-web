@@ -39,10 +39,6 @@ export default function IndicatorsProvider({ children }: { children: React.React
       }))
     } else {
       setColumns(document === DOCUMENT_TYPES.EXPENSES ? EXPENSES_COLUMNS : PAYMENTS_COLUMNS)
-      setFilter((prev) => ({
-        ...prev,
-        fields: [{ field: "type", value: document }]
-      }))
     }
     
     setDocument(document)

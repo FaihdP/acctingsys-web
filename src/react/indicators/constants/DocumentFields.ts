@@ -25,7 +25,8 @@ const EXPENSE_FIELDS = {
 const PAYMENT_FIELDS = { 
   type: { 
     label: "Tipo de pago",
-    values: ["DIGITAL", "CASH"]
+    values: ["DIGITAL", "CASH"],
+    getterText: (value: string) => value === "DIGITAL" ? "Digital" : "Efectivo"
   }, 
   bank: { label: "Banco" },
   branchId: {
