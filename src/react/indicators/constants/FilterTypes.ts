@@ -5,5 +5,4 @@ export enum FILTER_TYPES {
 
 export const FILTER_TYPES_TEXTS = new Map([
   [FILTER_TYPES.DATE_RANGE, "Rango de fechas"],
-  [FILTER_TYPES.COMPARISION, "Comparación"],
 ])
