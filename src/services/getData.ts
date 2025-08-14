@@ -10,6 +10,7 @@ export default async function getData(
   }
 ) {
   let pathQueryString = new URLSearchParams()
+  const isDocumentTypeBuy = DOCUMENT_TYPES.BUY_INVOICES === documentType
   
   if ([DOCUMENT_TYPES.SALE_INVOICES, DOCUMENT_TYPES.BUY_INVOICES].includes(documentType)) {
     pathQueryString.set("type", "invoices")
@@ -49,9 +50,10 @@ export default async function getData(
         person: documentFields.person.getterText(item.person),
         branchId: await documentFields.branchId.getterText(item.branchId.replace("BRANCH#", "")),
       })))
-      return newData
+      return newData.filter((item: any) => item.type === (isDocumentTypeBuy ? "BUY" : "SALE"))
     }
-    return data
+    return data.filter((item: any) => item.type === (isDocumentTypeBuy ? "BUY" : "SALE"))
+
   }
 
   if (documentType === DOCUMENT_TYPES.PAYMENTS) {
